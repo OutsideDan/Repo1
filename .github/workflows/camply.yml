@@ -1,18 +1,20 @@
-name: Camply Peninsula Watcher      # appears on the Actions tab
+name: Camply Peninsula Even-Site Watcher
 
 on:
+  # Run automatically every 5 minutes (GitHub uses UTC)
   schedule:
-    - cron: '*/5 * * * *'           # every 5 minutes (GitHub uses UTC)
-  workflow_dispatch:                # adds a “Run workflow” button
+    - cron: '*/5 * * * *'
+  # Adds a “Run workflow” button in the Actions tab
+  workflow_dispatch:
 
 jobs:
   camply:
     runs-on: ubuntu-latest
 
-    env:                            # secrets are stored in repo → Settings → Secrets → Actions
+    env:                      # <- add these two secrets in repo Settings ▸ Secrets ▸ Actions
       CAMPLY_EMAIL_USERNAME: ${{ secrets.CAMPLY_EMAIL_USERNAME }}
       CAMPLY_EMAIL_PASSWORD: ${{ secrets.CAMPLY_EMAIL_PASSWORD }}
-      CAMPLY_EMAIL_RECIPIENT: djlucas@gmail.com   # or any address you like
+      CAMPLY_EMAIL_RECIPIENT: djlucas@gmail.com     # change if you want alerts elsewhere
 
     steps:
       - name: Set up Python
@@ -23,12 +25,14 @@ jobs:
       - name: Install Camply
         run: pip install --quiet camply
 
-      - name: Run Camply scan
-        continue-on-error: true     # exit-code 2 (“no match”) won’t mark job as failed
+      - name: Scan even-numbered sites 840–870 (14-night window)
+        continue-on-error: true      # exit-code 2 (“no match yet”) won’t mark job as failed
         run: |
           camply campsites \
             --provider GoingToCamp \
-            --campsite 215 \         # ← REPLACE with Site-ID for campsite 860
-            --start-date 2026-07-12 \
-            --end-date   2026-07-15 \
+            --campground 2325 \   # Peninsula SP – Nicolet Bay campground ID
+            --campsite-numbers 840,842,844,846,848,850,852,854,856,858,860,862,864,866,868,870 \
+            --start-date 2026-06-28 \
+            --end-date   2026-07-12 \
+            --inclusive-search \
             --notifications email
