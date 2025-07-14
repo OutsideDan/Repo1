@@ -25,3 +25,12 @@ jobs:
             --start-date 2026-07-12 \
             --end-date   2026-07-15 \
             --notifications email || true
+- name: Run Camply
+  continue-on-error: true        # ← add this line
+  run: |
+    camply campsites \
+      --provider GoingToCamp \
+      --campsite 987654 \        # replace with real Site-ID
+      --start-date 2026-07-12 \
+      --end-date   2026-07-15 \
+      --notifications email
