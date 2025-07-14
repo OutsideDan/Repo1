@@ -1,36 +1,34 @@
-name: Camply Peninsula Watcher
+name: Camply Peninsula Watcher      # appears on the Actions tab
 
 on:
   schedule:
-    - cron: '*/5 * * * *'          # every 5 min
-  workflow_dispatch:
+    - cron: '*/5 * * * *'           # every 5 minutes (GitHub uses UTC)
+  workflow_dispatch:                # adds a “Run workflow” button
 
 jobs:
   camply:
     runs-on: ubuntu-latest
-    env:
+
+    env:                            # secrets are stored in repo → Settings → Secrets → Actions
       CAMPLY_EMAIL_USERNAME: ${{ secrets.CAMPLY_EMAIL_USERNAME }}
       CAMPLY_EMAIL_PASSWORD: ${{ secrets.CAMPLY_EMAIL_PASSWORD }}
-      CAMPLY_EMAIL_RECIPIENT: djlucas@gmail.com
+      CAMPLY_EMAIL_RECIPIENT: djlucas@gmail.com   # or any address you like
+
     steps:
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install --quiet camply
-      - name: Run Camply
+
+      - name: Install Camply
+        run: pip install --quiet camply
+
+      - name: Run Camply scan
+        continue-on-error: true     # exit-code 2 (“no match”) won’t mark job as failed
         run: |
           camply campsites \
             --provider GoingToCamp \
-            --campsite 215 \       # ← swap with actual Site-ID
+            --campsite 987654 \         # ← REPLACE with Site-ID for campsite 860
             --start-date 2026-07-12 \
             --end-date   2026-07-15 \
-            --notifications email || true
-- name: Run Camply
-  continue-on-error: true        # ← add this line
-  run: |
-    camply campsites \
-      --provider GoingToCamp \
-      --campsite 987654 \        # replace with real Site-ID
-      --start-date 2026-07-12 \
-      --end-date   2026-07-15 \
-      --notifications email
+            --notifications email
