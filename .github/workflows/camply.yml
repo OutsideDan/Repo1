@@ -21,7 +21,7 @@ jobs:
         run: |
           camply campsites \
             --provider GoingToCamp \
-            --campsite 987654 \       # ← swap with actual Site-ID
+            --campsite 215 \       # ← swap with actual Site-ID
             --start-date 2026-07-12 \
             --end-date   2026-07-15 \
             --notifications email || true
