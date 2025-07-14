@@ -28,7 +28,7 @@ jobs:
         run: |
           camply campsites \
             --provider GoingToCamp \
-            --campsite 987654 \         # ← REPLACE with Site-ID for campsite 860
+            --campsite 215 \         # ← REPLACE with Site-ID for campsite 860
             --start-date 2026-07-12 \
             --end-date   2026-07-15 \
             --notifications email
