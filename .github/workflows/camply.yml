@@ -1,0 +1,27 @@
+name: Camply Peninsula Watcher
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'          # every 5 min
+  workflow_dispatch:
+
+jobs:
+  camply:
+    runs-on: ubuntu-latest
+    env:
+      CAMPLY_EMAIL_USERNAME: ${{ secrets.CAMPLY_EMAIL_USERNAME }}
+      CAMPLY_EMAIL_PASSWORD: ${{ secrets.CAMPLY_EMAIL_PASSWORD }}
+      CAMPLY_EMAIL_RECIPIENT: djlucas@gmail.com
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet camply
+      - name: Run Camply
+        run: |
+          camply campsites \
+            --provider GoingToCamp \
+            --campsite 987654 \       # ← swap with actual Site-ID
+            --start-date 2026-07-12 \
+            --end-date   2026-07-15 \
+            --notifications email || true
