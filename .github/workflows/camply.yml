@@ -31,7 +31,7 @@ jobs:
           camply campsites \
             --provider GoingToCamp \
             --campground 2325 \   # Peninsula SP – Nicolet Bay campground ID
-            --campsite-numbers 840,842,844,846,848,850,852,854,856,858,860,862,864,866,868,870 \
+            --campsite-numbers 215,213,840,842,844,846,848,850,852,854,856,858,860,862,864,866,868,870 \
             --start-date 2026-06-28 \
             --end-date   2026-07-12 \
             --inclusive-search \
